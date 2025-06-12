@@ -11,6 +11,8 @@ const setupSecurity = (app) => {
   const allowedOrigins = [
     'http://10.12.91.55',
     'http://10.12.91.55:3000',
+    'http://eksamen.wendigo.ikt-fag.no',
+    'https://eksamen.wendigo.ikt-fag.no',
     process.env.FRONTEND_URL
   ].filter(Boolean);
   
