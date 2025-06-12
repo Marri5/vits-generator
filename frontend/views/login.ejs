@@ -185,16 +185,20 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: 'include',
+
             body: JSON.stringify({ username, password })
         });
         
         const data = await response.json();
         
         if (response.ok) {
+            console.log('Login vellykket, token mottatt');
+            
             // Lagre token i localStorage
             localStorage.setItem('authToken', data.token);
             localStorage.setItem('username', data.username);
+            
+            console.log('Token lagret:', data.token ? 'Ja' : 'Nei');
             
             // Redirect til forsiden
             window.location.href = '/';

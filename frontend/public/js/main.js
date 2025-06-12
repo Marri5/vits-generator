@@ -105,7 +105,10 @@ async function fetchNewJoke() {
 
     try {
         const token = getAuthToken();
+        console.log('Token funnet:', token ? 'Ja' : 'Nei');
+        
         if (!token) {
+            console.log('Ingen token funnet, redirecter til login');
             window.location.href = '/login';
             return;
         }
@@ -116,14 +119,18 @@ async function fetchNewJoke() {
             }
         });
         
+        console.log('Response status:', response.status);
+        
         if (!response.ok) {
-            if (response.status === 401) {
+            if (response.status === 401 || response.status === 403) {
                 // Token er ugyldig eller utløpt
+                console.log('Token ugyldig, fjerner og redirecter');
                 localStorage.removeItem('authToken');
+                localStorage.removeItem('username');
                 window.location.href = '/login';
                 return;
             }
-            throw new Error('Kunne ikke hente vits');
+            throw new Error(`Kunne ikke hente vits (${response.status})`);
         }
 
         const joke = await response.json();
