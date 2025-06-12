@@ -155,6 +155,17 @@ X-XSS-Protection: 1; mode=block
 Referrer-Policy: no-referrer
 ```
 
+**Cookie-sikkerhet**:
+```javascript
+// Cookie-innstillinger
+{
+  httpOnly: true,           // Forhindrer JavaScript-tilgang
+  secure: true,             // Kun over HTTPS i produksjon
+  sameSite: 'strict',       // Beskytter mot CSRF
+  maxAge: 365 * 24 * 60 * 60 * 1000  // 1 år
+}
+```
+
 ### 3. Database-sikkerhet
 
 **MongoDB konfigurasjon**:
@@ -247,9 +258,11 @@ done
 
 ### GDPR/Personvern:
 - ✅ Ingen persondata lagres
-- ✅ Ingen cookies for sporing
+- ✅ Kun én cookie for bruker-ID (anonym UUID)
+- ✅ Cookie inneholder ingen personlig informasjon
 - ✅ Anonym vurdering
 - ✅ Ingen brukerregistrering
+- ✅ Brukere kan slette sin historikk ved å slette cookies
 
 ### OWASP Top 10 (2021):
 1. ✅ Broken Access Control - Adressert

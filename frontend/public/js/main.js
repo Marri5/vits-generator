@@ -99,7 +99,9 @@ async function fetchNewJoke() {
     resetJokeDisplay();
 
     try {
-        const response = await fetch(`${API_URL}/api/joke/random`);
+        const response = await fetch(`${API_URL}/api/joke/random`, {
+            credentials: 'include' // Inkluder cookies
+        });
         
         if (!response.ok) {
             throw new Error('Kunne ikke hente vits');
@@ -143,6 +145,12 @@ function displayJoke(joke) {
         elements.revealBtn.focus(); // Flytt fokus til knappen
     }
 
+    // Hvis brukeren allerede har vurdert denne vitsen
+    if (joke.userRating) {
+        // Lagre brukerens tidligere vurdering
+        currentJoke.previousUserRating = joke.userRating;
+    }
+
     // Skjul vurdering og tilbakemelding
     if (elements.ratingSection) elements.ratingSection.style.display = 'none';
     if (elements.feedbackSection) elements.feedbackSection.style.display = 'none';
@@ -164,13 +172,26 @@ function revealPunchline() {
 
     if (elements.ratingSection) {
         elements.ratingSection.style.display = 'block';
+        
+        // Hvis brukeren har vurdert denne vitsen før
+        if (currentJoke.previousUserRating) {
+            // Vis tidligere vurdering
+            highlightStars(currentJoke.previousUserRating);
+            
+            // Oppdater tekst
+            const hint = document.querySelector('.rating-hint');
+            if (hint) {
+                hint.innerHTML = `Du ga denne vitsen ${currentJoke.previousUserRating} stjerner tidligere. <br>Klikk for å endre vurdering.`;
+            }
+        } else {
+            // Reset stjerner for ny vurdering
+            resetStars();
+        }
+        
         // Flytt fokus til første stjerne
         const firstStar = elements.starRating.querySelector('.star');
         if (firstStar) firstStar.focus();
     }
-
-    // Reset stjerner
-    resetStars();
 }
 
 /**
@@ -191,6 +212,7 @@ async function handleRating(rating) {
             headers: {
                 'Content-Type': 'application/json'
             },
+            credentials: 'include', // Inkluder cookies
             body: JSON.stringify({ rating: parseInt(rating) })
         });
 
@@ -222,9 +244,14 @@ function showFeedback(result, userRating) {
         elements.feedbackSection.style.display = 'block';
     }
 
-    // Oppdater tekst
+    // Oppdater tekst basert på om det er en ny eller oppdatert vurdering
     if (elements.feedbackText) {
-        elements.feedbackText.textContent = `Takk for din vurdering! Du ga ${userRating} stjerner.`;
+        if (result.previousRating) {
+            elements.feedbackText.innerHTML = `Din vurdering er oppdatert!<br>
+                Tidligere: ${result.previousRating} stjerner → Nå: ${result.newRating} stjerner`;
+        } else {
+            elements.feedbackText.textContent = `Takk for din vurdering! Du ga ${userRating} stjerner.`;
+        }
     }
 
     if (elements.averageRating) {

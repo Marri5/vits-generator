@@ -8,7 +8,14 @@ Vits-Generator API tilbyr endepunkter for å hente vitser, lagre vurderinger og 
 
 ## Autentisering
 
-APIet krever ingen autentisering, men bruker følgende sikkerhetstiltak:
+APIet bruker cookie-basert brukeridentifikasjon:
+- **Cookie navn**: `userId`
+- **Varighet**: 1 år
+- **Type**: HttpOnly, Secure (i produksjon), SameSite=strict
+- Automatisk generert UUID hvis ikke eksisterer
+- Ingen personlig informasjon lagres
+
+Sikkerhetstiltak:
 - Rate limiting: Maks 100 requests per 15 minutter per IP
 - CORS: Kun tillatt fra frontend IP (10.12.91.55)
 - Helmet.js for sikkerhetshoder
@@ -29,9 +36,13 @@ Henter en tilfeldig vits fra eksternt API og returnerer den med eventuell vurder
   "setup": "Why don't scientists trust atoms?",
   "punchline": "Because they make up everything!",
   "averageRating": 4.2,
-  "totalRatings": 15
+  "totalRatings": 15,
+  "userRating": 4
 }
 ```
+
+**Felter**:
+- `userRating`: Brukerens tidligere vurdering (null hvis ikke vurdert)
 
 **Statuskoder**:
 - `200 OK`: Vellykket respons
@@ -138,7 +149,43 @@ Returnerer aggregert statistikk for alle vitser og vurderinger.
 curl http://10.12.91.44:3001/api/stats
 ```
 
-### 5. Helsesjekk
+### 5. Brukerhistorikk
+
+Henter brukerens vurderingshistorikk basert på cookie.
+
+**Endpoint**: `GET /api/user/history`
+
+**Response**:
+```json
+{
+  "userId": "550e8400-e29b-41d4-a716-446655440000",
+  "history": [
+    {
+      "jokeId": 123,
+      "setup": "Why don't scientists trust atoms?",
+      "punchline": "Because they make up everything!",
+      "userRating": 4,
+      "averageRating": 4.2,
+      "totalRatings": 15,
+      "ratedAt": "2024-01-15T10:30:00.000Z"
+    }
+  ],
+  "totalRatings": 10,
+  "averageGivenRating": 3.8
+}
+```
+
+**Statuskoder**:
+- `200 OK`: Vellykket respons
+- `500 Internal Server Error`: Serverfeil
+
+**Eksempel**:
+```bash
+curl http://10.12.91.44:3001/api/user/history \
+  -H "Cookie: userId=550e8400-e29b-41d4-a716-446655440000"
+```
+
+### 6. Helsesjekk
 
 Sjekker om APIet er tilgjengelig og MongoDB-tilkoblingen fungerer.
 
@@ -206,12 +253,30 @@ APIet tillater kun requests fra frontend-serveren:
   setup: String,           // Oppsettet til vitsen
   punchline: String,       // Punchline
   ratings: [{              // Array med alle vurderinger
+    userId: String,        // Bruker-ID fra cookie
     rating: Number,        // 1-5
     timestamp: Date        // Når vurderingen ble gitt
   }],
   averageRating: Number,   // Beregnet gjennomsnitt
   totalRatings: Number,    // Totalt antall vurderinger
   createdAt: Date,         // Når vitsen ble lagret
+  updatedAt: Date          // Sist oppdatert
+}
+```
+
+### Bruker-modell
+
+```javascript
+{
+  userId: String,          // UUID generert av backend
+  ratedJokes: [{           // Array med vurderte vitser
+    jokeId: Number,        // ID til vitsen
+    rating: Number,        // Brukerens vurdering (1-5)
+    timestamp: Date        // Når vurderingen ble gitt
+  }],
+  totalRatings: Number,    // Totalt antall vurderinger
+  averageGivenRating: Number, // Gjennomsnitt av alle brukerens vurderinger
+  createdAt: Date,         // Når brukeren ble opprettet
   updatedAt: Date          // Sist oppdatert
 }
 ```

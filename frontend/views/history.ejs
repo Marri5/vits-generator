@@ -1,0 +1,198 @@
+<section class="history-section">
+    <h2>Min Vurderingshistorikk</h2>
+    
+    <% if (locals.error) { %>
+        <div class="error-message" role="alert">
+            <i class="fas fa-exclamation-circle"></i>
+            <%= error %>
+        </div>
+    <% } else if (history && history.totalRatings > 0) { %>
+        <div class="user-stats">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>Totalt antall vurderinger</h3>
+                    <p class="stat-number"><%= history.totalRatings %></p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>Din gjennomsnittlige vurdering</h3>
+                    <p class="stat-number"><%= history.averageGivenRating.toFixed(2) %></p>
+                    <div class="rating-visualization">
+                        <% for (let i = 1; i <= 5; i++) { %>
+                            <i class="fas fa-star <%= i <= Math.round(history.averageGivenRating) ? 'filled' : 'empty' %>"></i>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-fingerprint"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>Din bruker-ID</h3>
+                    <p class="user-id"><%= history.userId.substring(0, 8) %>...</p>
+                    <small>Lagret i cookie</small>
+                </div>
+            </div>
+        </div>
+        
+        <h3>Vurderte vitser</h3>
+        <div class="history-list">
+            <% history.history.forEach((joke) => { %>
+                <div class="history-item">
+                    <div class="joke-info">
+                        <p class="setup"><%= joke.setup %></p>
+                        <p class="punchline"><%= joke.punchline %></p>
+                    </div>
+                    <div class="rating-info">
+                        <div class="user-rating">
+                            <strong>Din vurdering:</strong>
+                            <div class="rating-stars">
+                                <% for (let i = 1; i <= 5; i++) { %>
+                                    <i class="fas fa-star <%= i <= joke.userRating ? 'filled' : 'empty' %>"></i>
+                                <% } %>
+                            </div>
+                        </div>
+                        <div class="average-rating">
+                            <small>Gjennomsnitt: <%= joke.averageRating.toFixed(1) %> (<%= joke.totalRatings %> vurderinger)</small>
+                        </div>
+                        <div class="rated-date">
+                            <small>Vurdert: <%= new Date(joke.ratedAt).toLocaleDateString('nb-NO', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            }) %></small>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    <% } else { %>
+        <div class="empty-state">
+            <i class="fas fa-history fa-3x"></i>
+            <p>Du har ikke vurdert noen vitser ennå.</p>
+            <a href="/" class="btn btn-primary">Start å vurdere vitser!</a>
+        </div>
+    <% } %>
+    
+    <div class="history-info">
+        <h3>Om vurderingshistorikk</h3>
+        <p><i class="fas fa-info-circle"></i> Vi bruker cookies for å huske dine vurderinger. Dette gjør at:</p>
+        <ul>
+            <li>Du kan se alle vitsene du har vurdert tidligere</li>
+            <li>Du kan endre dine tidligere vurderinger</li>
+            <li>Systemet husker deg selv om du lukker nettleseren</li>
+            <li>Ingen personlig informasjon lagres - kun en anonym ID</li>
+        </ul>
+        <p class="privacy-note">
+            <i class="fas fa-shield-alt"></i> 
+            <strong>Personvern:</strong> Cookie-en inneholder kun en anonym ID og utløper etter 1 år. 
+            Du kan slette historikken din ved å slette cookies i nettleseren.
+        </p>
+    </div>
+</section>
+
+<style>
+    .user-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: var(--spacing-lg);
+        margin-bottom: var(--spacing-xl);
+    }
+    
+    .user-id {
+        font-family: monospace;
+        font-size: 1.2rem;
+        color: var(--primary-color);
+    }
+    
+    .history-list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-md);
+        margin-bottom: var(--spacing-xl);
+    }
+    
+    .history-item {
+        background: var(--white);
+        padding: var(--spacing-lg);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: var(--spacing-lg);
+    }
+    
+    .joke-info .setup {
+        font-weight: 600;
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .joke-info .punchline {
+        color: var(--primary-color);
+        font-style: italic;
+    }
+    
+    .rating-info {
+        text-align: right;
+        min-width: 200px;
+    }
+    
+    .user-rating {
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .rated-date {
+        color: var(--text-secondary);
+        margin-top: var(--spacing-xs);
+    }
+    
+    .history-info {
+        background: var(--light-color);
+        padding: var(--spacing-lg);
+        border-radius: var(--radius-lg);
+        margin-top: var(--spacing-xl);
+    }
+    
+    .history-info h3 {
+        color: var(--primary-color);
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .history-info ul {
+        margin-left: var(--spacing-lg);
+        margin-top: var(--spacing-sm);
+    }
+    
+    .privacy-note {
+        margin-top: var(--spacing-md);
+        padding: var(--spacing-md);
+        background: var(--white);
+        border-radius: var(--radius-md);
+        border-left: 4px solid var(--secondary-color);
+    }
+    
+    @media (max-width: 768px) {
+        .history-item {
+            grid-template-columns: 1fr;
+        }
+        
+        .rating-info {
+            text-align: left;
+            margin-top: var(--spacing-md);
+            padding-top: var(--spacing-md);
+            border-top: 1px solid var(--light-color);
+        }
+    }
+</style> 
