@@ -1,0 +1,41 @@
+<section class="top-jokes-section">
+    <h2>Topp-vurderte Vitser</h2>
+    
+    <% if (locals.error) { %>
+        <div class="error-message" role="alert">
+            <i class="fas fa-exclamation-circle"></i>
+            <%= error %>
+        </div>
+    <% } else if (jokes && jokes.length > 0) { %>
+        <div class="jokes-grid">
+            <% jokes.forEach((joke, index) => { %>
+                <div class="top-joke-card">
+                    <div class="joke-rank">
+                        <span class="rank-number">#<%= index + 1 %></span>
+                    </div>
+                    <div class="joke-content">
+                        <p class="setup"><%= joke.setup %></p>
+                        <p class="punchline"><%= joke.punchline %></p>
+                    </div>
+                    <div class="joke-rating">
+                        <div class="rating-stars">
+                            <% for (let i = 1; i <= 5; i++) { %>
+                                <i class="fas fa-star <%= i <= Math.round(joke.averageRating) ? 'filled' : 'empty' %>"></i>
+                            <% } %>
+                        </div>
+                        <div class="rating-info">
+                            <span class="average"><%= joke.averageRating.toFixed(1) %></span>
+                            <span class="total">(<%= joke.totalRatings %> vurderinger)</span>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    <% } else { %>
+        <div class="empty-state">
+            <i class="fas fa-trophy fa-3x"></i>
+            <p>Ingen vitser har blitt vurdert ennå.</p>
+            <a href="/" class="btn btn-primary">Vær den første til å vurdere!</a>
+        </div>
+    <% } %>
+</section> 

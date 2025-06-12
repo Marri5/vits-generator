@@ -1,0 +1,91 @@
+<section class="joke-section">
+    <h2 class="visually-hidden">Vits-visning</h2>
+    
+    <!-- Laste-indikator -->
+    <div id="loading" class="loading" aria-live="polite" aria-busy="true" style="display: none;">
+        <i class="fas fa-spinner fa-spin"></i>
+        <span>Henter ny vits...</span>
+    </div>
+
+    <!-- Vits-container -->
+    <div id="joke-container" class="joke-container" role="region" aria-live="polite">
+        <div class="joke-card">
+            <div class="joke-content">
+                <p id="setup" class="joke-setup"></p>
+                <p id="punchline" class="joke-punchline" style="display: none;"></p>
+                <button id="reveal-btn" class="btn btn-primary reveal-btn" style="display: none;">
+                    <i class="fas fa-eye"></i> Vis punchline
+                </button>
+            </div>
+            
+            <!-- Vurderingsseksjon -->
+            <div id="rating-section" class="rating-section" style="display: none;">
+                <h3>Hva synes du om denne vitsen?</h3>
+                <div class="star-rating" role="radiogroup" aria-label="Vurder vitsen fra 1 til 5 stjerner">
+                    <button class="star" data-rating="1" aria-label="1 stjerne">
+                        <i class="far fa-star"></i>
+                    </button>
+                    <button class="star" data-rating="2" aria-label="2 stjerner">
+                        <i class="far fa-star"></i>
+                    </button>
+                    <button class="star" data-rating="3" aria-label="3 stjerner">
+                        <i class="far fa-star"></i>
+                    </button>
+                    <button class="star" data-rating="4" aria-label="4 stjerner">
+                        <i class="far fa-star"></i>
+                    </button>
+                    <button class="star" data-rating="5" aria-label="5 stjerner">
+                        <i class="far fa-star"></i>
+                    </button>
+                </div>
+                <p class="rating-hint">Klikk på stjernene for å vurdere</p>
+            </div>
+
+            <!-- Tilbakemelding etter vurdering -->
+            <div id="feedback-section" class="feedback-section" style="display: none;">
+                <div class="feedback-message">
+                    <i class="fas fa-check-circle"></i>
+                    <p id="feedback-text"></p>
+                </div>
+                <div class="joke-stats">
+                    <div class="stat">
+                        <i class="fas fa-star"></i>
+                        <span id="average-rating">0</span>
+                        <small>gjennomsnitt</small>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-users"></i>
+                        <span id="total-ratings">0</span>
+                        <small>vurderinger</small>
+                    </div>
+                </div>
+                <button id="next-joke-btn" class="btn btn-success">
+                    <i class="fas fa-arrow-right"></i> Neste vits
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feilmelding -->
+    <div id="error-container" class="error-container" style="display: none;" role="alert">
+        <i class="fas fa-exclamation-triangle"></i>
+        <p id="error-message"></p>
+        <button id="retry-btn" class="btn btn-secondary">
+            <i class="fas fa-redo"></i> Prøv igjen
+        </button>
+    </div>
+
+    <!-- Start-knapp -->
+    <div id="start-section" class="start-section">
+        <h2>Velkommen til Vits-Generator!</h2>
+        <p>Klar for å le? Trykk på knappen under for å starte.</p>
+        <button id="start-btn" class="btn btn-primary btn-large">
+            <i class="fas fa-play"></i> Start Vits-Generator
+        </button>
+    </div>
+</section>
+
+<script>
+    // API URL fra server
+    const API_URL = '<%= apiUrl %>';
+</script> 

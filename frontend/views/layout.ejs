@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Vits-Generator - Vurder og del vitser">
+    <title><%= title %> | Vits-Generator</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <!-- Font Awesome for ikoner -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Støtte for eldre nettlesere -->
+    <!--[if lt IE 9]>
+        <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <!-- Skip to main content link for screen readers -->
+    <a href="#main-content" class="skip-link">Hopp til hovedinnhold</a>
+    
+    <!-- Header -->
+    <header class="site-header" role="banner">
+        <div class="container">
+            <h1 class="site-title">
+                <a href="/">
+                    <i class="fas fa-laugh"></i>
+                    Vits-Generator
+                </a>
+            </h1>
+            <nav class="main-nav" role="navigation" aria-label="Hovedmeny">
+                <ul>
+                    <li><a href="/" aria-label="Gå til forsiden">Hjem</a></li>
+                    <li><a href="/topp-vitser" aria-label="Se topp-vurderte vitser">Topp Vitser</a></li>
+                    <li><a href="/statistikk" aria-label="Se statistikk">Statistikk</a></li>
+                    <li><a href="/hjelp" aria-label="Les brukerveiledning">Hjelp</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <div class="container">
+            <%- body %>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer" role="contentinfo">
+        <div class="container">
+            <p>&copy; 2024 Vits-Generator. Laget med <i class="fas fa-heart" aria-label="kjærlighet"></i> for humor.</p>
+            <p class="footer-links">
+                <a href="/hjelp#tilgjengelighet">Tilgjengelighet</a> |
+                <a href="/hjelp#personvern">Personvern</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="/js/main.js"></script>
+</body>
+</html> 

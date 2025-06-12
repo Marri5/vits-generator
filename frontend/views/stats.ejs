@@ -1,0 +1,57 @@
+<section class="stats-section">
+    <h2>Statistikk</h2>
+    
+    <% if (locals.error) { %>
+        <div class="error-message" role="alert">
+            <i class="fas fa-exclamation-circle"></i>
+            <%= error %>
+        </div>
+    <% } else if (stats) { %>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-laugh-beam fa-3x"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>Totalt antall vitser</h3>
+                    <p class="stat-number"><%= stats.totalJokes %></p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-vote-yea fa-3x"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>Totalt antall vurderinger</h3>
+                    <p class="stat-number"><%= stats.totalRatings %></p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-star fa-3x"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>Gjennomsnittsvurdering</h3>
+                    <p class="stat-number"><%= stats.overallAverageRating.toFixed(2) %></p>
+                    <div class="rating-visualization">
+                        <% for (let i = 1; i <= 5; i++) { %>
+                            <i class="fas fa-star <%= i <= Math.round(stats.overallAverageRating) ? 'filled' : 'empty' %>"></i>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="stats-info">
+            <p><i class="fas fa-info-circle"></i> Statistikken oppdateres i sanntid basert på alle vurderinger.</p>
+        </div>
+    <% } else { %>
+        <div class="empty-state">
+            <i class="fas fa-chart-bar fa-3x"></i>
+            <p>Ingen statistikk tilgjengelig ennå.</p>
+            <a href="/" class="btn btn-primary">Start å vurdere vitser!</a>
+        </div>
+    <% } %>
+</section> 
