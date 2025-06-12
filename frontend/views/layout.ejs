@@ -63,13 +63,31 @@
 
     <!-- JavaScript -->
     <script>
-        // Vis brukernavnet i navigasjonen
+        // Auth check og vis brukernavn
         document.addEventListener('DOMContentLoaded', () => {
+            const authToken = localStorage.getItem('authToken');
             const username = localStorage.getItem('username');
             const usernameDisplay = document.getElementById('username-display');
+            const currentPath = window.location.pathname;
             
+            // Sider som ikke krever autentisering
+            const publicPaths = ['/login', '/registrer'];
+            
+            // Sjekk om vi er på en beskyttet side uten token
+            if (!authToken && !publicPaths.includes(currentPath)) {
+                window.location.href = '/login';
+                return;
+            }
+            
+            // Vis brukernavn hvis logget inn
             if (username && usernameDisplay) {
                 usernameDisplay.innerHTML = `<i class="fas fa-user"></i> ${username}`;
+            }
+            
+            // Skjul user-nav hvis ikke logget inn
+            const userNav = document.querySelector('.user-nav');
+            if (userNav) {
+                userNav.style.display = authToken ? 'flex' : 'none';
             }
         });
     </script>

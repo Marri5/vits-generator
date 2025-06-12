@@ -222,9 +222,6 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
             successDiv.textContent = 'Kontoen ble opprettet! Logger deg inn...';
             successDiv.style.display = 'block';
             
-            // Send token som cookie til frontend
-            document.cookie = `authToken=${data.token}; path=/; max-age=${7 * 24 * 60 * 60}`;
-            
             // Redirect til forsiden etter kort pause
             setTimeout(() => {
                 window.location.href = '/';

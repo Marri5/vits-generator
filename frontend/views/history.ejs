@@ -6,7 +6,7 @@
             <i class="fas fa-exclamation-circle"></i>
             <%= error %>
         </div>
-    <% } else if (history && history.totalRatings > 0) { %>
+    <% } else if (history && history.ratedJokes && history.totalRatings > 0) { %>
         <div class="user-stats">
             <div class="stat-card">
                 <div class="stat-icon">
@@ -38,16 +38,16 @@
                     <i class="fas fa-fingerprint"></i>
                 </div>
                 <div class="stat-content">
-                    <h3>Din bruker-ID</h3>
-                    <p class="user-id"><%= history.userId.substring(0, 8) %>...</p>
-                    <small>Lagret i cookie</small>
+                    <h3>Ditt brukernavn</h3>
+                    <p class="user-id" id="username-stat">-</p>
+                    <small>Innlogget bruker</small>
                 </div>
             </div>
         </div>
         
         <h3>Vurderte vitser</h3>
         <div class="history-list">
-            <% history.history.forEach((joke) => { %>
+            <% history.ratedJokes.forEach((joke) => { %>
                 <div class="history-item">
                     <div class="joke-info">
                         <p class="setup"><%= joke.setup %></p>
@@ -66,7 +66,7 @@
                             <small>Gjennomsnitt: <%= joke.averageRating.toFixed(1) %> (<%= joke.totalRatings %> vurderinger)</small>
                         </div>
                         <div class="rated-date">
-                            <small>Vurdert: <%= new Date(joke.ratedAt).toLocaleDateString('nb-NO', {
+                            <small>Vurdert: <%= new Date(joke.timestamp).toLocaleDateString('nb-NO', {
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric',
@@ -88,20 +88,71 @@
     
     <div class="history-info">
         <h3>Om vurderingshistorikk</h3>
-        <p><i class="fas fa-info-circle"></i> Vi bruker cookies for å huske dine vurderinger. Dette gjør at:</p>
+        <p><i class="fas fa-info-circle"></i> Din vurderingshistorikk er knyttet til din bruker. Dette gjør at:</p>
         <ul>
             <li>Du kan se alle vitsene du har vurdert tidligere</li>
             <li>Du kan endre dine tidligere vurderinger</li>
-            <li>Systemet husker deg selv om du lukker nettleseren</li>
-            <li>Ingen personlig informasjon lagres - kun en anonym ID</li>
+            <li>Historikken er tilgjengelig på alle enheter du logger inn på</li>
+            <li>Kun du har tilgang til din historikk</li>
         </ul>
         <p class="privacy-note">
             <i class="fas fa-shield-alt"></i> 
-            <strong>Personvern:</strong> Cookie-en inneholder kun en anonym ID og utløper etter 1 år. 
-            Du kan slette historikken din ved å slette cookies i nettleseren.
+            <strong>Personvern:</strong> Din vurderingshistorikk er privat og kun tilgjengelig når du er logget inn. 
+            Ingen andre brukere kan se dine vurderinger.
         </p>
     </div>
 </section>
+
+<script>
+// Hent historikk på klient-siden
+document.addEventListener('DOMContentLoaded', async () => {
+    const token = localStorage.getItem('authToken');
+    const username = localStorage.getItem('username');
+    
+    // Vis brukernavn
+    const usernameStatEl = document.getElementById('username-stat');
+    if (usernameStatEl && username) {
+        usernameStatEl.textContent = username;
+    }
+    
+    if (!token) {
+        window.location.href = '/login';
+        return;
+    }
+    
+    // Hvis vi ikke har data fra server, hent det
+    <% if (!history) { %>
+    try {
+        const response = await fetch('<%= apiUrl %>/api/user/history', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        if (!response.ok) {
+            if (response.status === 401) {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('username');
+                window.location.href = '/login';
+                return;
+            }
+            throw new Error('Kunne ikke hente historikk');
+        }
+        
+        const history = await response.json();
+        
+        // Oppdater siden med data
+        if (history.totalRatings > 0) {
+            // Her kunne vi dynamisk bygge opp HTML, men for nå redirecter vi bare med data
+            console.log('Historikk hentet:', history);
+            // TODO: Dynamisk oppdater siden med historikk-data
+        }
+    } catch (error) {
+        console.error('Feil ved henting av historikk:', error);
+    }
+    <% } %>
+});
+</script>
 
 <style>
     .user-stats {

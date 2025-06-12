@@ -61,14 +61,6 @@ router.post('/register', async (req, res) => {
       { expiresIn: JWT_EXPIRES_IN }
     );
     
-    // Send token som cookie også
-    res.cookie('authToken', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 dager
-    });
-    
     res.status(201).json({ 
       message: 'Bruker opprettet',
       username: newUser.username,
@@ -114,14 +106,6 @@ router.post('/login', async (req, res) => {
       { expiresIn: JWT_EXPIRES_IN }
     );
     
-    // Send token som cookie også
-    res.cookie('authToken', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 dager
-    });
-    
     res.json({ 
       message: 'Innlogging vellykket',
       token,
@@ -144,7 +128,7 @@ router.get('/verify', async (req, res) => {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.startsWith('Bearer ') 
       ? authHeader.substring(7) 
-      : req.cookies?.authToken;
+      : null;
     
     if (!token) {
       return res.status(401).json({ message: 'Ingen token funnet' });

@@ -113,8 +113,7 @@ async function fetchNewJoke() {
         const response = await fetch(`${API_URL}/api/joke/random`, {
             headers: {
                 'Authorization': `Bearer ${token}`
-            },
-            credentials: 'include' // Inkluder cookies
+            }
         });
         
         if (!response.ok) {
@@ -239,7 +238,6 @@ async function handleRating(rating) {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            credentials: 'include', // Inkluder cookies
             body: JSON.stringify({ rating: parseInt(rating) })
         });
 

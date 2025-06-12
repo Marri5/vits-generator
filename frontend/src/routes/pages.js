@@ -7,29 +7,11 @@ const router = express.Router();
 const API_URL = process.env.API_URL || 'http://10.12.91.44:3001';
 
 // Authentication middleware - sjekker om bruker er logget inn
+// Siden vi ikke har tilgang til localStorage på server-side, må vi la klienten håndtere auth
 const requireAuth = async (req, res, next) => {
-  // Vi sjekker auth via frontend session/cookie som sendes til backend
-  const authToken = req.cookies?.authToken;
-  
-  if (!authToken) {
-    return res.redirect('/login');
-  }
-  
-  try {
-    // Verifiser token med backend
-    const response = await axios.get(`${API_URL}/api/user/verify`, {
-      headers: {
-        'Authorization': `Bearer ${authToken}`
-      }
-    });
-    
-    req.user = response.data.user;
-    next();
-  } catch (error) {
-    // Token er ugyldig eller utløpt
-    res.clearCookie('authToken');
-    res.redirect('/login');
-  }
+  // For server-side rendering, kan vi ikke sjekke JWT direkte
+  // La klienten håndtere redirect hvis ikke autentisert
+  next();
 };
 
 // Login side - åpen for alle
@@ -46,10 +28,20 @@ router.get('/registrer', (req, res) => {
   });
 });
 
-// Logout
+// Logout - må håndteres på klient-siden
 router.get('/logout', (req, res) => {
-  res.clearCookie('authToken');
-  res.redirect('/login');
+  // Send en side som fjerner localStorage og redirecter
+  res.send(`
+    <html>
+      <body>
+        <script>
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('username');
+          window.location.href = '/login';
+        </script>
+      </body>
+    </html>
+  `);
 });
 
 // Hovedside - krever autentisering
@@ -103,25 +95,13 @@ router.get('/statistikk', requireAuth, async (req, res) => {
 
 // Brukerhistorikk - krever autentisering
 router.get('/min-historikk', requireAuth, async (req, res) => {
-  try {
-    // Send cookies til backend
-    const headers = {
-      Cookie: req.headers.cookie || ''
-    };
-    
-    const response = await axios.get(`${API_URL}/api/user/history`, { headers });
-    res.render('history', { 
-      title: 'Min vurderingshistorikk',
-      history: response.data
-    });
-  } catch (error) {
-    console.error('Feil ved henting av historikk:', error);
-    res.render('history', { 
-      title: 'Min vurderingshistorikk',
-      history: null,
-      error: 'Kunne ikke hente historikk'
-    });
-  }
+  // Server-side kan ikke hente JWT fra localStorage
+  // Send en side som henter data på klient-siden
+  res.render('history', { 
+    title: 'Min vurderingshistorikk',
+    history: null, // Data hentes på klient-siden
+    apiUrl: API_URL
+  });
 });
 
 // Brukerveiledning - krever autentisering
