@@ -38,4 +38,88 @@
             <a href="/" class="btn btn-primary">Vær den første til å vurdere!</a>
         </div>
     <% } %>
-</section> 
+</section>
+
+<script>
+// Hent topp-vitser på klient-siden
+document.addEventListener('DOMContentLoaded', async () => {
+    const token = localStorage.getItem('authToken');
+    
+    if (!token) {
+        window.location.href = '/login';
+        return;
+    }
+    
+    // Hvis vi ikke har data fra server, hent det
+    <% if (!jokes) { %>
+    try {
+        const response = await fetch('<%= apiUrl %>/api/joke/top');
+        
+        if (!response.ok) {
+            if (response.status === 401) {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('username');
+                window.location.href = '/login';
+                return;
+            }
+            throw new Error('Kunne ikke hente topp-vitser');
+        }
+        
+        const jokes = await response.json();
+        
+        // Oppdater siden med data
+        if (jokes && jokes.length > 0) {
+            // Bygg opp HTML dynamisk
+            let html = '<h2>Topp-vurderte Vitser</h2><div class="jokes-grid">';
+            
+            jokes.forEach((joke, index) => {
+                const stars = Array(5).fill(0).map((_, i) => 
+                    `<i class="fas fa-star ${i < Math.round(joke.averageRating) ? 'filled' : 'empty'}"></i>`
+                ).join('');
+                
+                html += `
+                    <div class="top-joke-card">
+                        <div class="joke-rank">
+                            <span class="rank-number">#${index + 1}</span>
+                        </div>
+                        <div class="joke-content">
+                            <p class="setup">${joke.setup}</p>
+                            <p class="punchline">${joke.punchline}</p>
+                        </div>
+                        <div class="joke-rating">
+                            <div class="rating-stars">${stars}</div>
+                            <div class="rating-info">
+                                <span class="average">${joke.averageRating.toFixed(1)}</span>
+                                <span class="total">(${joke.totalRatings} vurderinger)</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            document.querySelector('.top-jokes-section').innerHTML = html;
+        } else {
+            // Vis empty state
+            document.querySelector('.top-jokes-section').innerHTML = `
+                <h2>Topp-vurderte Vitser</h2>
+                <div class="empty-state">
+                    <i class="fas fa-trophy fa-3x"></i>
+                    <p>Ingen vitser har blitt vurdert ennå.</p>
+                    <a href="/" class="btn btn-primary">Vær den første til å vurdere!</a>
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.error('Feil ved henting av topp-vitser:', error);
+        document.querySelector('.top-jokes-section').innerHTML = `
+            <h2>Topp-vurderte Vitser</h2>
+            <div class="error-message" role="alert">
+                <i class="fas fa-exclamation-circle"></i>
+                Kunne ikke hente topp-vitser. Prøv igjen senere.
+            </div>
+        `;
+    }
+    <% } %>
+});
+</script> 

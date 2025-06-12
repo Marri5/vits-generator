@@ -59,39 +59,15 @@ router.get('/', requireAuth, async (req, res) => {
 
 // Topp-vitser side - krever autentisering
 router.get('/topp-vitser', requireAuth, async (req, res) => {
-  try {
-    const response = await axios.get(`${API_URL}/api/joke/top`);
-    res.render('top-jokes', { 
-      title: 'Topp Vitser',
-      jokes: response.data
-    });
-  } catch (error) {
-    console.error('Feil ved henting av topp-vitser:', error);
-    res.render('top-jokes', { 
-      title: 'Topp Vitser',
-      jokes: [],
-      error: 'Kunne ikke hente topp-vitser'
-    });
-  }
+  // Send en side som henter data på klient-siden
+  res.render('top-jokes', { 
+    title: 'Topp Vitser',
+    jokes: null, // Data hentes på klient-siden
+    apiUrl: API_URL
+  });
 });
 
-// Statistikk side - krever autentisering
-router.get('/statistikk', requireAuth, async (req, res) => {
-  try {
-    const response = await axios.get(`${API_URL}/api/stats`);
-    res.render('stats', { 
-      title: 'Statistikk',
-      stats: response.data
-    });
-  } catch (error) {
-    console.error('Feil ved henting av statistikk:', error);
-    res.render('stats', { 
-      title: 'Statistikk',
-      stats: null,
-      error: 'Kunne ikke hente statistikk'
-    });
-  }
-});
+
 
 // Brukerhistorikk - krever autentisering
 router.get('/min-historikk', requireAuth, async (req, res) => {
