@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const Joke = require('../models/Joke');
 const User = require('../models/User');
-const { ensureUserId } = require('../middleware/auth');
+const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -10,7 +10,7 @@ const router = express.Router();
  * GET /api/joke/random
  * Henter en tilfeldig vits fra eksternt API
  */
-router.get('/random', ensureUserId, async (req, res) => {
+router.get('/random', authenticateToken, async (req, res) => {
   try {
     const response = await axios.get('https://official-joke-api.appspot.com/random_joke');
     const joke = response.data;
@@ -64,7 +64,7 @@ router.get('/random', ensureUserId, async (req, res) => {
  * Vurderer en vits
  * Body: { rating: number (1-5) }
  */
-router.post('/:id/rate', ensureUserId, async (req, res) => {
+router.post('/:id/rate', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
     const { rating } = req.body;

@@ -6,8 +6,49 @@ const router = express.Router();
 // Backend API URL
 const API_URL = process.env.API_URL || 'http://10.12.91.44:3001';
 
-// Hovedside
-router.get('/', async (req, res) => {
+// Authentication middleware - sjekker om bruker er logget inn
+const requireAuth = (req, res, next) => {
+  // Vi sjekker auth via frontend session/cookie som sendes til backend
+  const authToken = req.cookies?.authToken;
+  
+  if (!authToken) {
+    return res.redirect('/login');
+  }
+  
+  // Verifiser token med backend
+  axios.get(`${API_URL}/api/user/verify`, {
+    headers: {
+      'Authorization': `Bearer ${authToken}`
+    }
+  })
+  .then(response => {
+    req.user = response.data.user;
+    next();
+  })
+  .catch(error => {
+    res.clearCookie('authToken');
+    res.redirect('/login');
+  });
+};
+
+// Login side - åpen for alle
+router.get('/login', (req, res) => {
+  res.render('login');
+});
+
+// Register side - åpen for alle
+router.get('/registrer', (req, res) => {
+  res.render('register');
+});
+
+// Logout
+router.get('/logout', (req, res) => {
+  res.clearCookie('authToken');
+  res.redirect('/login');
+});
+
+// Hovedside - krever autentisering
+router.get('/', requireAuth, async (req, res) => {
   try {
     res.render('index', { 
       title: 'Vits-Generator',
@@ -19,8 +60,8 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Topp-vitser side
-router.get('/topp-vitser', async (req, res) => {
+// Topp-vitser side - krever autentisering
+router.get('/topp-vitser', requireAuth, async (req, res) => {
   try {
     const response = await axios.get(`${API_URL}/api/joke/top`);
     res.render('top-jokes', { 
@@ -37,8 +78,8 @@ router.get('/topp-vitser', async (req, res) => {
   }
 });
 
-// Statistikk side
-router.get('/statistikk', async (req, res) => {
+// Statistikk side - krever autentisering
+router.get('/statistikk', requireAuth, async (req, res) => {
   try {
     const response = await axios.get(`${API_URL}/api/stats`);
     res.render('stats', { 
@@ -55,8 +96,8 @@ router.get('/statistikk', async (req, res) => {
   }
 });
 
-// Brukerhistorikk
-router.get('/min-historikk', async (req, res) => {
+// Brukerhistorikk - krever autentisering
+router.get('/min-historikk', requireAuth, async (req, res) => {
   try {
     // Send cookies til backend
     const headers = {
@@ -78,8 +119,8 @@ router.get('/min-historikk', async (req, res) => {
   }
 });
 
-// Brukerveiledning
-router.get('/hjelp', (req, res) => {
+// Brukerveiledning - krever autentisering
+router.get('/hjelp', requireAuth, (req, res) => {
   res.render('help', { 
     title: 'Brukerveiledning'
   });

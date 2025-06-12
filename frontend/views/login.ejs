@@ -1,0 +1,193 @@
+<%- include('layout', { 
+    title: 'Logg inn - Vits Generator',
+    bodyClass: 'login-page'
+}) %>
+
+<section class="auth-container">
+    <div class="auth-card">
+        <h1>Logg inn</h1>
+        <p class="auth-subtitle">Velkommen tilbake til Vits Generator!</p>
+        
+        <form id="loginForm" class="auth-form">
+            <div class="form-group">
+                <label for="username">Brukernavn</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    required 
+                    placeholder="Skriv inn ditt brukernavn"
+                    autocomplete="username"
+                >
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Passord</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    required 
+                    placeholder="Skriv inn ditt passord"
+                    autocomplete="current-password"
+                >
+            </div>
+            
+            <div class="form-error" id="loginError" style="display: none;"></div>
+            
+            <button type="submit" class="btn btn-primary btn-block">
+                <span id="loginText">Logg inn</span>
+                <span id="loginLoader" style="display: none;">
+                    <i class="fas fa-spinner fa-spin"></i> Logger inn...
+                </span>
+            </button>
+        </form>
+        
+        <div class="auth-footer">
+            <p>Har du ikke en konto? <a href="/registrer">Registrer deg her</a></p>
+        </div>
+    </div>
+</section>
+
+<style>
+.auth-container {
+    min-height: calc(100vh - 200px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.auth-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 400px;
+}
+
+.auth-card h1 {
+    text-align: center;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+}
+
+.auth-subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.auth-form {
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.form-error {
+    background: #fee;
+    color: #c33;
+    padding: 0.75rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.btn-block {
+    width: 100%;
+    padding: 0.875rem;
+    font-size: 1.1rem;
+}
+
+.auth-footer {
+    text-align: center;
+    color: #666;
+}
+
+.auth-footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+</style>
+
+<script>
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const errorDiv = document.getElementById('loginError');
+    const loginText = document.getElementById('loginText');
+    const loginLoader = document.getElementById('loginLoader');
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    
+    // Vis loading state
+    loginText.style.display = 'none';
+    loginLoader.style.display = 'inline-block';
+    submitBtn.disabled = true;
+    errorDiv.style.display = 'none';
+    
+    try {
+        const response = await fetch('http://10.12.91.44:3001/api/user/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({ username, password })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            // Lagre token i localStorage
+            localStorage.setItem('authToken', data.token);
+            localStorage.setItem('username', data.username);
+            
+            // Redirect til forsiden
+            window.location.href = '/';
+        } else {
+            errorDiv.textContent = data.message || 'Feil brukernavn eller passord';
+            errorDiv.style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        errorDiv.textContent = 'Kunne ikke koble til serveren. Prøv igjen senere.';
+        errorDiv.style.display = 'block';
+    } finally {
+        // Skjul loading state
+        loginText.style.display = 'inline';
+        loginLoader.style.display = 'none';
+        submitBtn.disabled = false;
+    }
+});
+</script> 
