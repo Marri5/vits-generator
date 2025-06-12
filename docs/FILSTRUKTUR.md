@@ -7,8 +7,9 @@ Prosjektet er nå reorganisert i en mer modulær og vedlikeholdbar struktur.
 
 ```
 backend/
-├── server.js                 # Hovedserverfil (strømlinjeformet)
+├── server.js                 # Hovedserverfil
 ├── package.json
+├── package-lock.json
 ├── .env
 ├── .env.example
 └── src/
@@ -53,8 +54,9 @@ backend/
 
 ```
 frontend/
-├── app.js                    # Hovedserverfil (strømlinjeformet)
+├── app.js                    # Hovedserverfil
 ├── package.json
+├── package-lock.json
 ├── .env
 ├── .env.example
 ├── src/
@@ -62,15 +64,18 @@ frontend/
 │   │   └── express.js        # Express konfigurasjon (EJS, static files)
 │   └── routes/
 │       └── pages.js          # Alle side-ruter samlet
-├── views/                    # EJS templates (uendret)
+├── views/                    # EJS templates
 │   ├── layout.ejs
 │   ├── index.ejs
 │   ├── top-jokes.ejs
-│   ├── stats.ejs
+│   ├── stats.ejs (hvis finnes)
 │   ├── history.ejs
 │   ├── help.ejs
+│   ├── login.ejs
+│   ├── register.ejs
+│   ├── error.ejs
 │   └── 404.ejs
-└── public/                   # Statiske filer (uendret)
+└── public/                   # Statiske filer
     ├── css/
     │   └── style.css
     └── js/

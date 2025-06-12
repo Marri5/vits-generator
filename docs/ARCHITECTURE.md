@@ -7,6 +7,58 @@ Vits-Generator er en tre-lags webapplikasjon som består av:
 2. **Backend** (Applikasjonslag) - REST API server
 3. **Database** (Datalag) - MongoDB
 
+## Filstruktur (hovedmapper og viktige filer)
+
+```
+backend/
+├── server.js
+├── package.json
+├── package-lock.json
+├── .env
+├── .env.example
+└── src/
+    ├── config/
+    │   └── database.js
+    ├── middleware/
+    │   ├── auth.js
+    │   └── security.js
+    ├── models/
+    │   ├── Joke.js
+    │   └── User.js
+    └── routes/
+        ├── jokes.js
+        ├── users.js
+        └── stats.js
+
+frontend/
+├── app.js
+├── package.json
+├── package-lock.json
+├── .env
+├── .env.example
+├── src/
+│   ├── config/
+│   │   └── express.js
+│   └── routes/
+│       └── pages.js
+├── views/
+│   ├── layout.ejs
+│   ├── index.ejs
+│   ├── top-jokes.ejs
+│   ├── stats.ejs (hvis finnes)
+│   ├── history.ejs
+│   ├── help.ejs
+│   ├── login.ejs
+│   ├── register.ejs
+│   ├── error.ejs
+│   └── 404.ejs
+└── public/
+    ├── css/
+    │   └── style.css
+    └── js/
+        └── main.js
+```
+
 ## Systemskisse
 
 ```

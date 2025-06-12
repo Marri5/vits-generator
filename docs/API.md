@@ -237,9 +237,9 @@ Når grensen er nådd:
 
 ## CORS Policy
 
-APIet tillater kun requests fra frontend-serveren:
-- **Tillatt origin**: `http://10.12.91.55:3000`
-- **Tillatte metoder**: GET, POST
+APIet tillater kun requests fra frontend-serveren og produksjonsdomenet:
+- **Tillatt origin**: `http://10.12.91.55:3000`, `http://eksamen.wendigo.ikt-fag.no`, `https://eksamen.wendigo.ikt-fag.no`
+- **Tillatte metoder**: GET, POST, PUT, DELETE, OPTIONS
 - **Credentials**: Støttet
 
 ## Database Schema
