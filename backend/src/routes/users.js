@@ -54,9 +54,26 @@ router.post('/register', async (req, res) => {
     
     await newUser.save();
     
+    // Generer JWT token for automatisk innlogging
+    const token = jwt.sign(
+      { userId: newUser.userId, username: newUser.username },
+      JWT_SECRET,
+      { expiresIn: JWT_EXPIRES_IN }
+    );
+    
+    // Send token som cookie også
+    res.cookie('authToken', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 dager
+    });
+    
     res.status(201).json({ 
       message: 'Bruker opprettet',
-      username: newUser.username 
+      username: newUser.username,
+      token,
+      userId: newUser.userId
     });
     
   } catch (error) {

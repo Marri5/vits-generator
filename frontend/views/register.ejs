@@ -215,13 +215,20 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
         const data = await response.json();
         
         if (response.ok) {
-            successDiv.textContent = 'Kontoen ble opprettet! Omdirigerer til innlogging...';
+            // Lagre token og brukernavn for automatisk innlogging
+            localStorage.setItem('authToken', data.token);
+            localStorage.setItem('username', data.username);
+            
+            successDiv.textContent = 'Kontoen ble opprettet! Logger deg inn...';
             successDiv.style.display = 'block';
             
-            // Redirect til login etter 2 sekunder
+            // Send token som cookie til frontend
+            document.cookie = `authToken=${data.token}; path=/; max-age=${7 * 24 * 60 * 60}`;
+            
+            // Redirect til forsiden etter kort pause
             setTimeout(() => {
-                window.location.href = '/login';
-            }, 2000);
+                window.location.href = '/';
+            }, 1500);
         } else {
             errorDiv.textContent = data.message || 'Kunne ikke opprette konto';
             errorDiv.style.display = 'block';
