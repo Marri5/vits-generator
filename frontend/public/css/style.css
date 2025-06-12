@@ -1,0 +1,893 @@
+/* ==============================================
+   VITS-GENERATOR STYLESHEET
+   Responsivt design med universell utforming
+============================================== */
+
+/* ==============================================
+   1. RESET OG GRUNNLEGGENDE STILER
+============================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Fargepalett med høy kontrast */
+    --primary-color: #2563eb;
+    --primary-hover: #1d4ed8;
+    --secondary-color: #10b981;
+    --secondary-hover: #059669;
+    --danger-color: #ef4444;
+    --warning-color: #f59e0b;
+    --dark-color: #1f2937;
+    --light-color: #f3f4f6;
+    --white: #ffffff;
+    --black: #000000;
+    
+    /* Tekstfarger */
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --text-light: #9ca3af;
+    
+    /* Skygger */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    
+    /* Spacing */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+    
+    /* Border radius */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 1rem;
+    
+    /* Transitions */
+    --transition-fast: 150ms ease-in-out;
+    --transition-normal: 300ms ease-in-out;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: var(--text-primary);
+    background-color: var(--light-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Skip to content link for screen readers */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary-color);
+    color: var(--white);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    text-decoration: none;
+    border-radius: 0 0 var(--radius-md) 0;
+    z-index: 1000;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* ==============================================
+   2. LAYOUT OG CONTAINER
+============================================== */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+}
+
+main {
+    flex: 1;
+    padding: var(--spacing-lg) 0;
+}
+
+/* ==============================================
+   3. HEADER OG NAVIGASJON
+============================================== */
+.site-header {
+    background: var(--white);
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.site-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md);
+}
+
+.site-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.site-title a {
+    color: var(--primary-color);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.site-title a:hover {
+    color: var(--primary-hover);
+}
+
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+.main-nav a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+}
+
+.main-nav a:hover,
+.main-nav a:focus {
+    background-color: var(--light-color);
+    color: var(--primary-color);
+}
+
+/* ==============================================
+   4. FOOTER
+============================================== */
+.site-footer {
+    background: var(--dark-color);
+    color: var(--white);
+    padding: var(--spacing-lg) 0;
+    margin-top: var(--spacing-xl);
+}
+
+.site-footer .container {
+    text-align: center;
+}
+
+.site-footer a {
+    color: var(--white);
+    text-decoration: underline;
+}
+
+.site-footer a:hover {
+    color: var(--light-color);
+}
+
+.footer-links {
+    margin-top: var(--spacing-sm);
+}
+
+/* ==============================================
+   5. KNAPPER
+============================================== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    min-height: 44px; /* WCAG touch target */
+}
+
+.btn:focus {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: var(--white);
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+}
+
+.btn-secondary {
+    background: var(--text-secondary);
+    color: var(--white);
+}
+
+.btn-secondary:hover {
+    background: var(--text-primary);
+}
+
+.btn-success {
+    background: var(--secondary-color);
+    color: var(--white);
+}
+
+.btn-success:hover {
+    background: var(--secondary-hover);
+}
+
+.btn-large {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: 1.125rem;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ==============================================
+   6. VITS-SEKSJON
+============================================== */
+.joke-section {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.joke-container {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.joke-card {
+    text-align: center;
+}
+
+.joke-content {
+    margin-bottom: var(--spacing-lg);
+}
+
+.joke-setup {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.4;
+}
+
+.joke-punchline {
+    font-size: 1.25rem;
+    color: var(--primary-color);
+    font-style: italic;
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: var(--light-color);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--primary-color);
+}
+
+.reveal-btn {
+    margin-top: var(--spacing-md);
+}
+
+/* ==============================================
+   7. VURDERINGSSYSTEM
+============================================== */
+.rating-section {
+    padding: var(--spacing-lg) 0;
+    border-top: 1px solid var(--light-color);
+}
+
+.rating-section h3 {
+    font-size: 1.25rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--text-primary);
+}
+
+.star-rating {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-sm);
+}
+
+.star {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: var(--text-light);
+    cursor: pointer;
+    padding: var(--spacing-xs);
+    transition: all var(--transition-fast);
+    min-width: 44px;
+    min-height: 44px;
+}
+
+.star:hover,
+.star:focus {
+    color: var(--warning-color);
+    transform: scale(1.1);
+}
+
+.star.active {
+    color: var(--warning-color);
+}
+
+.star:focus {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+
+.rating-hint {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+/* ==============================================
+   8. TILBAKEMELDING
+============================================== */
+.feedback-section {
+    text-align: center;
+    padding: var(--spacing-lg) 0;
+}
+
+.feedback-message {
+    background: var(--secondary-color);
+    color: var(--white);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+.feedback-message i {
+    font-size: 1.5rem;
+}
+
+.joke-stats {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat i {
+    font-size: 1.5rem;
+    color: var(--warning-color);
+    display: block;
+    margin-bottom: var(--spacing-xs);
+}
+
+.stat span {
+    font-size: 2rem;
+    font-weight: 700;
+    display: block;
+    color: var(--text-primary);
+}
+
+.stat small {
+    color: var(--text-secondary);
+}
+
+/* ==============================================
+   9. LASTING OG FEILMELDINGER
+============================================== */
+.loading {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--text-secondary);
+}
+
+.loading i {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-sm);
+    display: block;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.error-container,
+.error-message {
+    background: var(--danger-color);
+    color: var(--white);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    text-align: center;
+}
+
+.error-container i {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-sm);
+    display: block;
+}
+
+/* ==============================================
+   10. START-SEKSJON
+============================================== */
+.start-section {
+    text-align: center;
+    padding: var(--spacing-xl);
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+}
+
+.start-section h2 {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--primary-color);
+}
+
+.start-section p {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* ==============================================
+   11. TOPP VITSER
+============================================== */
+.jokes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.top-joke-card {
+    background: var(--white);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    transition: transform var(--transition-normal);
+}
+
+.top-joke-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.joke-rank {
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    background: var(--primary-color);
+    color: var(--white);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.top-joke-card .setup {
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+}
+
+.top-joke-card .punchline {
+    color: var(--primary-color);
+    font-style: italic;
+}
+
+.joke-rating {
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--light-color);
+}
+
+.rating-stars {
+    margin-bottom: var(--spacing-xs);
+}
+
+.rating-stars .fa-star.filled {
+    color: var(--warning-color);
+}
+
+.rating-stars .fa-star.empty {
+    color: var(--text-light);
+}
+
+.rating-info {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.rating-info .average {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* ==============================================
+   12. STATISTIKK
+============================================== */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.stat-card {
+    background: var(--white);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    text-align: center;
+}
+
+.stat-icon {
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-md);
+}
+
+.stat-content h3 {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.stat-number {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.rating-visualization {
+    margin-top: var(--spacing-sm);
+}
+
+.stats-info {
+    background: var(--light-color);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    text-align: center;
+}
+
+/* ==============================================
+   13. HJELPESEKSJON
+============================================== */
+.help-section {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: var(--spacing-xl);
+}
+
+.help-nav {
+    background: var(--white);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: calc(80px + var(--spacing-md));
+    height: fit-content;
+}
+
+.help-nav h3 {
+    margin-bottom: var(--spacing-md);
+    color: var(--text-primary);
+}
+
+.help-nav ul {
+    list-style: none;
+}
+
+.help-nav li {
+    margin-bottom: var(--spacing-xs);
+}
+
+.help-nav a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    display: block;
+    padding: var(--spacing-xs);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.help-nav a:hover {
+    background: var(--light-color);
+    color: var(--primary-color);
+}
+
+.help-content {
+    background: var(--white);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.help-content section {
+    margin-bottom: var(--spacing-xl);
+}
+
+.help-content h3 {
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-md);
+    font-size: 1.5rem;
+}
+
+.help-content h4 {
+    color: var(--text-primary);
+    margin-top: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+}
+
+.help-tip {
+    background: var(--light-color);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    margin: var(--spacing-md) 0;
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.help-tip i {
+    color: var(--warning-color);
+    font-size: 1.5rem;
+}
+
+.troubleshooting-item {
+    background: var(--light-color);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.troubleshooting-item h4 {
+    color: var(--danger-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* ==============================================
+   14. 404 SIDE
+============================================== */
+.error-404 {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.error-content {
+    background: var(--white);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+}
+
+.error-404 i {
+    color: var(--primary-color);
+    margin: var(--spacing-lg) 0;
+}
+
+.error-404 h2 {
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+.error-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    margin: var(--spacing-lg) 0;
+}
+
+.error-suggestion {
+    background: var(--light-color);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    margin-top: var(--spacing-lg);
+}
+
+.error-suggestion ul {
+    list-style: none;
+    margin-top: var(--spacing-sm);
+}
+
+.error-suggestion a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.error-suggestion a:hover {
+    text-decoration: underline;
+}
+
+/* ==============================================
+   15. EMPTY STATES
+============================================== */
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-xl);
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.empty-state i {
+    color: var(--text-light);
+    margin-bottom: var(--spacing-md);
+}
+
+.empty-state p {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* ==============================================
+   16. UTILITY CLASSES
+============================================== */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ==============================================
+   17. RESPONSIVT DESIGN
+============================================== */
+@media (max-width: 768px) {
+    /* Mobil navigasjon */
+    .site-header .container {
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+    
+    .main-nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    /* Mobil vits-visning */
+    .joke-setup {
+        font-size: 1.25rem;
+    }
+    
+    .joke-punchline {
+        font-size: 1.125rem;
+    }
+    
+    /* Mobil statistikk */
+    .joke-stats {
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+    
+    /* Mobil hjelp */
+    .help-section {
+        grid-template-columns: 1fr;
+    }
+    
+    .help-nav {
+        position: relative;
+        top: auto;
+    }
+    
+    /* Mobil grid */
+    .jokes-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Mindre spacing på små skjermer */
+    .container {
+        padding: 0 var(--spacing-sm);
+    }
+    
+    .joke-container {
+        padding: var(--spacing-md);
+    }
+    
+    /* Mindre fontstørrelser */
+    html {
+        font-size: 14px;
+    }
+    
+    /* Justere knapper */
+    .error-actions {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ==============================================
+   18. PRINT STYLES
+============================================== */
+@media print {
+    .site-header,
+    .site-footer,
+    .main-nav,
+    .btn,
+    .star-rating,
+    .rating-section,
+    .feedback-section {
+        display: none !important;
+    }
+    
+    body {
+        background: white;
+        color: black;
+    }
+    
+    .joke-container {
+        box-shadow: none;
+        border: 1px solid black;
+    }
+}
+
+/* ==============================================
+   19. HIGH CONTRAST MODE
+============================================== */
+@media (prefers-contrast: high) {
+    :root {
+        --primary-color: #0050d8;
+        --text-primary: #000000;
+        --text-secondary: #333333;
+        --light-color: #ffffff;
+    }
+    
+    .btn:focus,
+    .star:focus {
+        outline-width: 4px;
+    }
+}
+
+/* ==============================================
+   20. REDUCED MOTION
+============================================== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    html {
+        scroll-behavior: auto;
+    }
+} 
