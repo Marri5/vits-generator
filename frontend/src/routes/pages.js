@@ -34,12 +34,16 @@ const requireAuth = async (req, res, next) => {
 
 // Login side - åpen for alle
 router.get('/login', (req, res) => {
-  res.render('login');
+  res.render('login', {
+    title: 'Logg inn - Vits Generator'
+  });
 });
 
 // Register side - åpen for alle
 router.get('/registrer', (req, res) => {
-  res.render('register');
+  res.render('register', {
+    title: 'Registrer deg - Vits Generator'
+  });
 });
 
 // Logout
