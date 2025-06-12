@@ -8,7 +8,8 @@ const { authenticateToken } = require('../middleware/auth');
 const router = express.Router();
 
 // JWT Secret - bør være i .env
-const JWT_SECRET = process.env.JWT_SECRET || 'din-hemmelige-jwt-nokkel-her';
+const JWT_SECRET = process.env.JWT_SECRET_TOKEN || 'din-hemmelige-jwt-nokkel-her';
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 
 /**
  * POST /api/user/register
@@ -93,7 +94,7 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign(
       { userId: user.userId, username: user.username },
       JWT_SECRET,
-      { expiresIn: '7d' }
+      { expiresIn: JWT_EXPIRES_IN }
     );
     
     // Send token som cookie også

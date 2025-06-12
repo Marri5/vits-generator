@@ -140,6 +140,34 @@
 </style>
 
 <script>
+// Sjekk om bruker allerede er logget inn
+document.addEventListener('DOMContentLoaded', () => {
+    const existingToken = localStorage.getItem('authToken');
+    if (existingToken) {
+        // Verifiser at token fortsatt er gyldig
+        fetch('http://10.12.91.44:3001/api/user/verify', {
+            headers: {
+                'Authorization': `Bearer ${existingToken}`
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                // Token er gyldig, redirect til forsiden
+                window.location.href = '/';
+            } else {
+                // Token er ugyldig, fjern den
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('username');
+            }
+        })
+        .catch(() => {
+            // Feil ved verifisering, fjern token
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('username');
+        });
+    }
+});
+
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     

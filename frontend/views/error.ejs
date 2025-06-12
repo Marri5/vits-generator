@@ -1,0 +1,103 @@
+<%- include('layout', { 
+    title: locals.title || 'Feil',
+    bodyClass: 'error-page'
+}) %>
+
+<section class="error-container">
+    <div class="error-content">
+        <i class="fas fa-exclamation-triangle fa-4x"></i>
+        <h1>Beklager, noe gikk galt</h1>
+        <p class="error-description">
+            <%= locals.error || 'En uventet feil oppstod. Vennligst prøv igjen senere.' %>
+        </p>
+        
+        <div class="error-actions">
+            <a href="/" class="btn btn-primary">
+                <i class="fas fa-home"></i> Gå til forsiden
+            </a>
+            <button onclick="window.history.back()" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Gå tilbake
+            </button>
+        </div>
+        
+        <div class="error-help">
+            <p>Hvis problemet vedvarer, kan du:</p>
+            <ul>
+                <li>Sjekke internettforbindelsen din</li>
+                <li>Prøve å laste siden på nytt</li>
+                <li>Tømme nettleserens cache</li>
+                <li>Kontakte support</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<style>
+.error-container {
+    min-height: calc(100vh - 300px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.error-content {
+    text-align: center;
+    max-width: 600px;
+}
+
+.error-content i {
+    color: var(--danger-color);
+    margin-bottom: 1.5rem;
+}
+
+.error-content h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.error-description {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+.error-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.error-help {
+    background: var(--light-color);
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    text-align: left;
+}
+
+.error-help p {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.error-help ul {
+    margin-left: 1.5rem;
+    color: var(--text-secondary);
+}
+
+.error-help li {
+    margin-bottom: 0.25rem;
+}
+
+@media (max-width: 480px) {
+    .error-actions {
+        flex-direction: column;
+    }
+    
+    .error-actions .btn {
+        width: 100%;
+    }
+}
+</style> 

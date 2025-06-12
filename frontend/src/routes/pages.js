@@ -7,7 +7,7 @@ const router = express.Router();
 const API_URL = process.env.API_URL || 'http://10.12.91.44:3001';
 
 // Authentication middleware - sjekker om bruker er logget inn
-const requireAuth = (req, res, next) => {
+const requireAuth = async (req, res, next) => {
   // Vi sjekker auth via frontend session/cookie som sendes til backend
   const authToken = req.cookies?.authToken;
   
@@ -15,20 +15,21 @@ const requireAuth = (req, res, next) => {
     return res.redirect('/login');
   }
   
-  // Verifiser token med backend
-  axios.get(`${API_URL}/api/user/verify`, {
-    headers: {
-      'Authorization': `Bearer ${authToken}`
-    }
-  })
-  .then(response => {
+  try {
+    // Verifiser token med backend
+    const response = await axios.get(`${API_URL}/api/user/verify`, {
+      headers: {
+        'Authorization': `Bearer ${authToken}`
+      }
+    });
+    
     req.user = response.data.user;
     next();
-  })
-  .catch(error => {
+  } catch (error) {
+    // Token er ugyldig eller utløpt
     res.clearCookie('authToken');
     res.redirect('/login');
-  });
+  }
 };
 
 // Login side - åpen for alle

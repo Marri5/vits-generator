@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 // JWT Secret
-const JWT_SECRET = process.env.JWT_SECRET || 'din-hemmelige-jwt-nokkel-her';
+const JWT_SECRET = process.env.JWT_SECRET_TOKEN || 'din-hemmelige-jwt-nokkel-her';
 
 // Middleware for JWT autentisering
 const authenticateToken = async (req, res, next) => {
